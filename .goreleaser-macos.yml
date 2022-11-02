@@ -2,7 +2,7 @@ before:
   hooks:
     - go mod tidy
 
-dist: dist/dist-darwin
+dist: dist-darwin
 
 builds:
   - main: .

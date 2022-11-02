@@ -19,7 +19,7 @@ builds:
     goamd64:
       - v1
     prebuilt:
-      path: dist/dist-{{ .Os }}/sqlitr2_{{ .Os }}_{{ .Arch }}{{ with .Amd64 }}_{{ . }}{{ end }}/sqlitr2{{ .Ext }}
+      path: dist-{{ .Os }}/sqlitr2_{{ .Os }}_{{ .Arch }}{{ with .Amd64 }}_{{ . }}{{ end }}/sqlitr2{{ .Ext }}
     binary: sqlitr2
 
 #builds:

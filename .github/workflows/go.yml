@@ -18,7 +18,8 @@ jobs:
   build-test:
     strategy:
       matrix:
-        os: [ macos-12, ubuntu-22.04 ]
+        os: [ macos-12 ]
+#        os: [ macos-12, ubuntu-22.04 ]
 #        os: [ macos-12, ubuntu-22.04, windows-2022]
 
     runs-on: ${{ matrix.os }}
@@ -29,16 +30,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: 1.19
-
-      - name: Build
-        run: go build -v ./...
-
-      - name: Test
-        run: go test -v -race ./...
+#      - name: Set up Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: 1.19
+#
+#      - name: Build
+#        run: go build -v ./...
+#
+#      - name: Test
+#        run: go test -v -race ./...
 
 #
   build-artifacts-macos:
@@ -70,13 +71,13 @@ jobs:
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
       - name: who dist?
-        run: ls -alF ./dist/dist-darwin
+        run: ls -alF ./dist-darwin
 
       - name: Upload assets
         uses: actions/upload-artifact@v3
         with:
           name: sqlitr2-macos-artifacts
-          path: dist/dist-darwin
+          path: ./dist-darwin
 
 
   #
@@ -89,14 +90,14 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: sqlitr2-macos-artifacts
-        path: dist/dist-darwin
+        path: dist-darwin
 
     - name: Install tree
       run: |
         sudo apt-get -y install tree
 
     - name: who dist?
-      run: tree ./dist
+      run: tree ./dist-darwin
 #      run: ls -alF ./dist
 
     - name: Checkout
