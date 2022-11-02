@@ -49,7 +49,7 @@ jobs:
           # either 'goreleaser' (default) or 'goreleaser-pro'
           distribution: goreleaser-pro
           version: 1.12.3
-          args: release --snapshot --rm-dist -f .goreleaser-macos.yml
+          args: release --rm-dist -f .goreleaser-macos.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
@@ -58,5 +58,5 @@ jobs:
       - name: Upload assets
         uses: actions/upload-artifact@v3
         with:
-          name: sqlitr2-macos
+          name: sqlitr2
           path: dist/*
