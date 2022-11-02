@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build-test:
-    uses: neilotoole/sqlitr2/.github/workflows/build-test.yml
+    uses: neilotoole/sqlitr2/.github/workflows/build-test.yml@master
 #  build-test:
 #    strategy:
 #      matrix:
