@@ -29,6 +29,7 @@ jobs:
 
 
   build-artifacts-macos:
+    needs: build-test
     runs-on: macos-latest
 
     steps:
@@ -53,3 +54,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+
+      - name: Upload assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: sqlitr2-macos
+          path: dist/*
