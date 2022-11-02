@@ -64,7 +64,7 @@ jobs:
           # either 'goreleaser' (default) or 'goreleaser-pro'
           distribution: goreleaser-pro
           version: 1.12.3
-          args: release --rm-dist -f .goreleaser-macos.yml
+          args: release -f .goreleaser-macos.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
@@ -100,6 +100,9 @@ jobs:
       run: tree ./dist-darwin
 #      run: ls -alF ./dist
 
+    - name: stat it
+      run: stat dist-darwin/sqlitr2_darwin_arm64/sqlitr2
+
     - name: Checkout
       uses: actions/checkout@v3
       with:
@@ -116,7 +119,7 @@ jobs:
         # either 'goreleaser' (default) or 'goreleaser-pro'
         distribution: goreleaser-pro
         version: 1.12.3
-        args: release --rm-dist -f .goreleaser.yml
+        args: release -f .goreleaser.yml
       env:
         GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
