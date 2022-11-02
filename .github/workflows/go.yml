@@ -69,11 +69,14 @@ jobs:
           # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
+      - name: who dist?
+        run: ls -alF ./dist
+
       - name: Upload assets
         uses: actions/upload-artifact@v3
         with:
           name: sqlitr2-macos-artifacts
-          path: dist/*
+          path: dist/dist-darwin
 
 
   #
@@ -86,7 +89,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: sqlitr2-macos-artifacts
-        path: dist
+        path: dist/dist-darwin
 
     - name: who dist?
       run: ls -alF ./dist
