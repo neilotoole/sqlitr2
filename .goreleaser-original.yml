@@ -1,29 +1,19 @@
+project_name: sqlitr2
+env:
+  - CGO_ENABLED=1
 before:
   hooks:
     - go mod tidy
-
-dist: dist/dist-darwin
-
 builds:
-  - main: .
-    binary: sq
+  - id: build_macos
     env:
-      - CGO_ENABLED=1
+#      - CC=o64-clang
+#      - CXX=o64-clang++
+    main: ./main.go
     goos:
       - darwin
     goarch:
       - amd64
-      - arm64
-      - 386
-    ldflags:
-      - -linkmode external -extldflags -static
-      - -s -w -X main.version={{.Version}}
-      - -X main.commit={{.Commit}}
-      - -X main.date={{.Date}}
-      - -X main.builtBy=goreleaser
-
-archives:
-  - format: binary
 
 #  - id: build_linux
 #    env:
@@ -50,33 +40,33 @@ archives:
 #    goarch:
 #      - amd64
 
-#archives:
-#  -
-##    builds: ['build_macos', 'build_linux', 'build_windows']
-#    builds: ['build_macos']
-#    format: tar.gz
-#    files:
-#      - README.md
-#      - LICENSE
-#    format_overrides:
-#      - goos: windows
-#        format: zip
+archives:
+  -
+#    builds: ['build_macos', 'build_linux', 'build_windows']
+    builds: ['build_macos']
+    format: tar.gz
+    files:
+      - README.md
+      - LICENSE
+    format_overrides:
+      - goos: windows
+        format: zip
 
-#
-#checksum:
-#  name_template: 'checksums.txt'
-#snapshot:
-#  name_template: "{{ .Tag }}-snapshot"
-#changelog:
-#  skip: true
-#
-#
-#release:
-#  github:
-#    owner: neilotoole
-#    name: sqlitr2
-#  draft: false
-#  prerelease: auto
+
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-snapshot"
+changelog:
+  skip: true
+
+
+release:
+  github:
+    owner: neilotoole
+    name: sqlitr2
+  draft: false
+  prerelease: auto
 
 #
 #nfpms:
@@ -92,26 +82,18 @@ archives:
 #    license: "MIT"
 #
 
-#brews:
-#  -
-#    homepage: "https://github.com/neilotoole/sqlitr2"
-#    description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
-#    license: "MIT"
-#
-#    tap:
-#      owner: neilotoole
-#      name: homebrew-sqlitr2
-#
-#    install: |
-#      bin.install "sqlitr2"
-#    test: |
-#      system "#{bin}/sqlitr2 --version"
-#
-#    # Git author used to commit to the repository.
-#    # Defaults are shown.
-#    commit_author:
-#      name: neilotoole
-#      email: neilotoole@apache.org
+brews:
+  -
+    homepage: "https://github.com/neilotoole/sqlitr2"
+    description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
+    github:
+      owner: neilotoole
+      name: homebrew-sqlitr2
+
+    install: |
+      bin.install "sqlitr2"
+    test: |
+      system "#{bin}/sqlitr2 --version"
 
 #
 #scoop:

@@ -90,3 +90,25 @@ jobs:
 
     - name: who dist?
       run: ls -alF ./dist
+
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19.2
+
+    - name: Run GoReleaser
+      uses: goreleaser/goreleaser-action@v3
+      with:
+        # either 'goreleaser' (default) or 'goreleaser-pro'
+        distribution: goreleaser-pro
+        version: 1.12.3
+        args: release --rm-dist -f .goreleaser.yml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
+        GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
