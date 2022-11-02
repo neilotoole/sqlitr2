@@ -14,7 +14,7 @@ builds:
     goarch:
       - amd64
       - arm64
-      - 386
+#      - 386
     ldflags:
 #      - -linkmode external -extldflags -static
       - -s -w -X main.version={{.Version}}
