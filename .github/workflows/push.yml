@@ -1,5 +1,15 @@
 name: Push (Build Test)
-on: [push]
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - '*'
+    #      - main
+    #      - 'mona/octocat'
+    #      - 'releases/**'
+    # Sequence of patterns matched against refs/tags
+#    tags:
+#      - '*'
 
 
 jobs:

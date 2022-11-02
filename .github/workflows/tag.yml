@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: echo something
-      - run: echo "hello there"
+        run: echo "hello there"
 
 #
 #  build-artifacts-macos:
