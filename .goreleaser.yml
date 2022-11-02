@@ -19,8 +19,8 @@ builds:
     goamd64:
       - v1
     prebuilt:
-      path: dist/dist-{{ .Os }}/sq_{{ .Os }}_{{ .Arch }}{{ with .Amd64 }}_{{ . }}{{ end }}/sq{{ .Ext }}
-    binary: sq
+      path: dist/dist-{{ .Os }}/sq_{{ .Os }}_{{ .Arch }}{{ with .Amd64 }}_{{ . }}{{ end }}/sqlitr2{{ .Ext }}
+    binary: sqlitr2
 
 #builds:
 #  - id: build_macos

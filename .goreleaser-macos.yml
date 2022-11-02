@@ -6,7 +6,7 @@ dist: dist/dist-darwin
 
 builds:
   - main: .
-    binary: sq
+    binary: sqlitr2
     env:
       - CGO_ENABLED=1
     goos:
@@ -16,7 +16,7 @@ builds:
       - arm64
       - 386
     ldflags:
-      - -linkmode external -extldflags -static
+#      - -linkmode external -extldflags -static
       - -s -w -X main.version={{.Version}}
       - -X main.commit={{.Commit}}
       - -X main.date={{.Date}}
