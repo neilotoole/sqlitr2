@@ -16,3 +16,4 @@
 *.iml
 /dist/
 /example.sqlite
+/dist*
