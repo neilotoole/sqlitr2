@@ -86,11 +86,12 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y \
+          gcc-aarch64-linux-gnu \
           crossbuild-essential-arm64 \
           binutils-aarch64-linux-gnu \
           binutils-arm-linux-gnueabi \
           curl \
-          gcc-aarch64-linux-gnu \
+          
           gcc-arm-linux-gnueabi
 
       - name: GoReleaser (build linux binaries)
