@@ -14,9 +14,11 @@ builds:
     goarch:
       - amd64
       - arm64
-#      - 386
     goamd64:
       - v1
+    ignore:
+      - goos: windows
+        goarch: arm64
     prebuilt:
       path: dist-{{ .Os }}/sqlitr2_{{ .Os }}_{{ .Arch }}{{ with .Amd64 }}_{{ . }}{{ end }}/sqlitr2{{ .Ext }}
     binary: sqlitr2
