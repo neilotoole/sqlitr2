@@ -9,8 +9,8 @@ before:
 builds:
   - builder: prebuilt
     goos:
-#      - linux
-#      - windows
+      - linux
+      - windows
       - darwin
     goarch:
       - amd64
@@ -110,26 +110,26 @@ changelog:
 #    license: "MIT"
 #
 
-#brews:
-#  -
-#    homepage: "https://github.com/neilotoole/sqlitr2"
-#    description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
-#    github:
-#      owner: neilotoole
-#      name: homebrew-sqlitr2
-#
-#    install: |
-#      bin.install "sqlitr2"
-#    test: |
-#      system "#{bin}/sqlitr2 --version"
+brews:
+  -
+    homepage: "https://github.com/neilotoole/sqlitr2"
+    description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
+    github:
+      owner: neilotoole
+      name: homebrew-sqlitr2
 
-#
-#scoop:
-#  bucket:
-#    owner: neilotoole
-#    name: sqlitr2
-#  homepage: "https://github.com/neilotoole/sqlitr2"
-#  description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
+    install: |
+      bin.install "sqlitr2"
+    test: |
+      system "#{bin}/sqlitr2 --version"
+
+
+scoop:
+  bucket:
+    owner: neilotoole
+    name: sqlitr2
+  homepage: "https://github.com/neilotoole/sqlitr2"
+  description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
 #
 #snapcrafts:
 #  # For this to work, login to snapcraft.

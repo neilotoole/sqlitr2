@@ -6,7 +6,7 @@ env:
   GORELEASER_VERSION: 1.12.3
 
 jobs:
-  build-test:
+  go-test:
     strategy:
       matrix:
         os: [ ubuntu-22.04 ]
@@ -35,7 +35,7 @@ jobs:
 
   goreleaser-gate:
     #    if: startsWith(github.ref, 'refs/tags/v) # Only run this if it's a tag, e.g. v1.0.1
-    needs: build-test
+    needs: go-test
     runs-on: ubuntu-22.04
 
     steps:
@@ -71,8 +71,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dist-darwin
-          path: |
-            dist-darwin
+          path: dist-darwin
 
 
   build-binaries-linux-amd64:
@@ -110,8 +109,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dist-linux-amd64
-          path: |
-            dist-linux
+          path: dist-linux
 
   build-binaries-linux-arm64:
     needs: goreleaser-gate
@@ -154,8 +152,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dist-linux-arm64
-          path: |
-            dist-linux
+          path: dist-linux
 
 
   build-binaries-windows:
@@ -188,8 +185,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dist-windows
-          path: |
-            dist-windows
+          path: dist-windows
 
 
   show-it:
@@ -225,7 +221,7 @@ jobs:
 
 
   publish:
-    if: startsWith(github.ref, 'refs/tags/vXXX')  # Only run this if it's a tag, e.g. v1.0.1
+#    if: startsWith(github.ref, 'refs/tags/v')  # Only run this if it's a tag, e.g. v1.0.1
     needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
     runs-on: ubuntu-22.04
 
@@ -254,6 +250,11 @@ jobs:
       with:
         name: dist-linux-arm64
         path: dist-linux
+
+    - uses: actions/download-artifact@v3
+      with:
+        name: dist-windows
+        path: dist-windows
 
     - name: GoReleaser (publish)
       uses: goreleaser/goreleaser-action@v3
