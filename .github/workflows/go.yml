@@ -211,7 +211,7 @@ jobs:
 
   publish:
     if: startsWith(github.ref, 'refs/tags/v')  # Only run this if it's a tag, e.g. v1.0.1
-    needs: [ build-binaries-darwin, build-binaries-linux]
+    needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64 ]
     runs-on: ubuntu-22.04
 
     steps:
