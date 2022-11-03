@@ -1,23 +1,13 @@
-name: Push (Build Test)
+name: Main pipeline
 on: push
-#  push:
-#    # Sequence of patterns matched against refs/heads
-#    branches:
-#      - '*'
-#    #      - main
-#    #      - 'mona/octocat'
-#    #      - 'releases/**'
-#    # Sequence of patterns matched against refs/tags
-#    tags:
-#      - '*'
 
 
 jobs:
   build-test:
     strategy:
       matrix:
-        os: [ macos-12 ]
-#        os: [ macos-12, ubuntu-22.04 ]
+        os: [ macos-12, ubuntu-22.04 ]
+#        os: [ macos-12 ]
 #        os: [ macos-12, ubuntu-22.04, windows-2022]
 
     runs-on: ${{ matrix.os }}
@@ -39,7 +29,6 @@ jobs:
       - name: Test
         run: go test -v -race ./...
 
-#
   build-artifacts-darwin:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: build-test
@@ -68,9 +57,6 @@ jobs:
           # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
-      - name: who dist?
-        run: ls -alF ./dist-darwin
-
       - name: Upload assets
         uses: actions/upload-artifact@v3
         with:
@@ -78,10 +64,42 @@ jobs:
           path: ./dist-darwin
 
 
-  #
-  publish-artifacts:
-#    if: startsWith(github.ref, 'refs/tags/v')
-    needs: [build-artifacts-darwin]
+  build-artifacts-linux:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build-test
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19.2
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v3
+        with:
+          # either 'goreleaser' (default) or 'goreleaser-pro'
+          distribution: goreleaser-pro
+          version: 1.12.3
+          args: release -f .goreleaser-linux.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
+          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+
+      - name: Upload assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-linux
+          path: dist-linux
+
+  publish:
+    needs: [ build-artifacts-darwin, build-artifacts-linux]
     runs-on: ubuntu-22.04
 
     steps:
@@ -100,13 +118,10 @@ jobs:
         name: dist-darwin
         path: dist-darwin
 
-    - name: Install tree
-      run: |
-        sudo apt-get -y install tree
-
-    - name: who dist-darwin?
-      run: tree ./dist-darwin
-#      run: ls -alF ./dist
+    - uses: actions/download-artifact@v3
+      with:
+        name: dist-linux
+        path: dist-linux
 
     - name: Run GoReleaser
       uses: goreleaser/goreleaser-action@v3
@@ -119,6 +134,3 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
         GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-
-    - name: who dist?
-      run: tree ./dist
