@@ -33,7 +33,7 @@ jobs:
         run: go test -v -race ./...
 
   build-artifacts-darwin:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') # Only run this if it's a tag, e.g. v1.0.1
     needs: build-test
     runs-on: macos-12
 
@@ -48,7 +48,7 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
-      - name: GoReleaser (build darwin)
+      - name: GoReleaser (build darwin binaries)
         uses: goreleaser/goreleaser-action@v3
         with:
           distribution: goreleaser-pro
@@ -58,7 +58,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
-      - name: Upload assets
+      - name: Upload assets (darwin)
         uses: actions/upload-artifact@v3
         with:
           name: dist-darwin
@@ -66,7 +66,7 @@ jobs:
 
 
   build-artifacts-linux:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v')  # Only run this if it's a tag, e.g. v1.0.1
     needs: build-test
     runs-on: ubuntu-22.04
 
@@ -81,7 +81,7 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
-      - name: GoReleaser (build linux)
+      - name: GoReleaser (build linux binaries)
         uses: goreleaser/goreleaser-action@v3
         with:
           distribution: goreleaser-pro
@@ -91,7 +91,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
-      - name: Upload assets
+      - name: Upload assets (linux)
         uses: actions/upload-artifact@v3
         with:
           name: dist-linux
