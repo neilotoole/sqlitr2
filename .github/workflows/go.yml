@@ -111,6 +111,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
+      - name: install tree
+        run: sudo apt update && sudo apt install tree
+
+      - name: show dist
+        run: tree dist-linux
+
       - name: Upload assets (linux)
         uses: actions/upload-artifact@v3
         with:
