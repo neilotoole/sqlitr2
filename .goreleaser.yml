@@ -1,4 +1,3 @@
-project_name: sqlitr2
 env:
   - CGO_ENABLED=1
 
@@ -114,9 +113,16 @@ brews:
   -
     homepage: "https://github.com/neilotoole/sqlitr2"
     description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
-    github:
+    license: MIT
+    tap:
+      # Repository owner template. (templateable)
       owner: neilotoole
+      # Repository name. (templateable)
       name: homebrew-sqlitr2
+
+    commit_author:
+      name: neilotoole
+      email: neilotoole@apache.org
 
     install: |
       bin.install "sqlitr2"
@@ -130,6 +136,10 @@ scoop:
     name: sqlitr2
   homepage: "https://github.com/neilotoole/sqlitr2"
   description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
+  license: MIT
+  commit_author:
+    name: neilotoole
+    email: neilotoole@apache.org
 #
 #snapcrafts:
 #  # For this to work, login to snapcraft.
