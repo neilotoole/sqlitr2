@@ -5,30 +5,29 @@ before:
 dist: dist-linux
 
 builds:
-#  - id: build-linux-amd64
-#    main: .
-#    binary: sqlitr2
-#    env:
-#      - CGO_ENABLED=1
-#    goos:
-#      - linux
-#    goarch:
-#      - amd64
-##      - arm64
-#    ldflags:
-##      - -linkmode external -extldflags -static
-#      - -s -w -X main.version={{.Version}}
-#      - -X main.commit={{.Commit}}
-#      - -X main.date={{.Date}}
-#      - -X main.builtBy=goreleaser
-#
+  - id: build-linux-amd64
+    main: .
+    binary: sqlitr2
+    env:
+      - CGO_ENABLED=1
+    goos:
+      - linux
+    goarch:
+      - amd64
+#      - arm64
+    ldflags:
+#      - -linkmode external -extldflags -static
+      - -s -w -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+      - -X main.builtBy=goreleaser
+
   - id: build-linux-arm64
     main: .
     binary: sqlitr2
     env:
       - CGO_ENABLED=1
       - CC=aarch64-linux-gnu-gcc
-#      - CC=aarch64-linux-gnu-gc
       - CXX=aarch64-linux-gnu-g++
     goos:
       - linux
