@@ -123,6 +123,30 @@ jobs:
           name: dist-linux
           path: dist-linux
 
+  showit:
+    needs: [ build-binaries-darwin, build-binaries-linux]
+    runs-on: ubuntu-22.04
+
+    steps:
+
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist-darwin
+          path: dist-darwin
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist-linux
+          path: dist-linux
+
+      - name: install tree
+        run: sudo apt update && sudo apt install tree
+
+      - name: show dist*
+        run: tree dist*
+
+
   publish:
     if: startsWith(github.ref, 'refs/tags/v')  # Only run this if it's a tag, e.g. v1.0.1
     needs: [ build-binaries-darwin, build-binaries-linux]
