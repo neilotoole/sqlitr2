@@ -73,7 +73,6 @@ jobs:
           name: dist-darwin
           path: |
             dist-darwin
-            !dist-darwin/**/*checksums.txt
 
 
   build-binaries-linux-amd64:
@@ -113,7 +112,6 @@ jobs:
           name: dist-linux-amd64
           path: |
             dist-linux
-            !dist-linux/**/*checksums.txt
 
   build-binaries-linux-arm64:
     needs: publish-gate
@@ -162,7 +160,7 @@ jobs:
           name: dist-linux-arm64
           path: |
             dist-linux
-            !dist-linux/**/*checksums.txt
+
   show-it:
     needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64 ]
     runs-on: ubuntu-22.04
