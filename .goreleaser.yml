@@ -23,43 +23,6 @@ builds:
       path: dist-{{ .Os }}/sqlitr2_{{ .Os }}_{{ .Arch }}{{ with .Amd64 }}_{{ . }}{{ end }}/sqlitr2{{ .Ext }}
     binary: sqlitr2
 
-#builds:
-#  - id: build_macos
-#    env:
-##      - CC=o64-clang
-##      - CXX=o64-clang++
-#    main: ./main.go
-#    goos:
-#      - darwin
-#    goarch:
-#      - amd64
-
-#  - id: build_linux
-#    env:
-#    main: ./main.go
-#    goos:
-#      - linux
-#    goarch:
-#      - amd64
-#    ldflags:
-#      # Note the additional ldflags (-linkmode etc), and the "-tags=netgo" in
-#      # flags below. This is to build a static binary.
-#      - -linkmode external -extldflags -static -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser
-#    flags:
-#      - -tags=netgo
-#      - -v
-#
-#  - id: build_windows
-#    env:
-#      - CC=x86_64-w64-mingw32-gcc
-#      - CXX=x86_64-w64-mingw32-g++
-#    main: ./main.go
-#    goos:
-#      - windows
-#    goarch:
-#      - amd64
-
-
 archives:
   -
     replacements:
@@ -72,19 +35,6 @@ archives:
       - README.md
       - LICENSE
 
-#archives:
-#  -
-##    builds: ['build_macos', 'build_linux', 'build_windows']
-#    builds: ['build_macos']
-#    format: tar.gz
-#    files:
-#      - README.md
-#      - LICENSE
-#    format_overrides:
-#      - goos: windows
-#        format: zip
-
-
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -92,27 +42,14 @@ snapshot:
 changelog:
   skip: true
 
+release:
+  github:
+    owner: neilotoole
+    name: sqlitr2
+  draft: false
+  prerelease: auto
 
-#release:
-#  github:
-#    owner: neilotoole
-#    name: sqlitr2
-#  draft: false
-#  prerelease: auto
 
-#
-#nfpms:
-#  -
-#    builds: ['build_linux']
-#    formats:
-#      - deb
-#      - rpm
-#    vendor: "neilotoole"
-#    homepage: "https://github.com/neilotoole/sqltir"
-#    maintainer: "neilotoole@apache.org"
-#    description: "sqlitr is a trivial Go/CGo SQLite CLI"
-#    license: "MIT"
-#
 
 brews:
   -
@@ -134,7 +71,6 @@ brews:
     test: |
       system "#{bin}/sqlitr2 --version"
 
-
 scoop:
   bucket:
     owner: neilotoole
@@ -145,6 +81,21 @@ scoop:
   commit_author:
     name: neilotoole
     email: neilotoole@apache.org
+
+#
+#nfpms:
+#  -
+#    builds: ['build_linux']
+#    formats:
+#      - deb
+#      - rpm
+#    vendor: "neilotoole"
+#    homepage: "https://github.com/neilotoole/sqltir"
+#    maintainer: "neilotoole@apache.org"
+#    description: "sqlitr is a trivial Go/CGo SQLite CLI"
+#    license: "MIT"
+#
+
 #
 #snapcrafts:
 #  # For this to work, login to snapcraft.
