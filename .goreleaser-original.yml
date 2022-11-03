@@ -86,9 +86,16 @@ brews:
   -
     homepage: "https://github.com/neilotoole/sqlitr2"
     description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
-    github:
+    license: MIT
+    tap:
+      # Repository owner template. (templateable)
       owner: neilotoole
+      # Repository name. (templateable)
       name: homebrew-sqlitr2
+
+    commit_author:
+      name: neilotoole
+      email: neilotoole@apache.org
 
     install: |
       bin.install "sqlitr2"
