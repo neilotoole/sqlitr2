@@ -34,7 +34,7 @@ jobs:
 #        run: go test -v  ./...
 
   build-binaries-darwin:
-    if: startsWith(github.ref, 'refs/tags/vXXX') # Only run this if it's a tag, e.g. v1.0.1
+#    if: startsWith(github.ref, 'refs/tags/v) # Only run this if it's a tag, e.g. v1.0.1
     needs: build-test
     runs-on: macos-12
 
