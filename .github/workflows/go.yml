@@ -4,12 +4,15 @@ on: push
 env:
   GO_VERSION: 1.19.2
   GORELEASER_VERSION: 1.12.3
+  MACOS_VERSION: macos-12
+  LINUX_VERSION: ubuntu-22.04
+  WINDOWS_VERSION: windows-2022
 
 jobs:
   build-test:
     strategy:
       matrix:
-        os: [ macos-12, ubuntu-22.04 ]
+        os: [ ${{ env.MACOS_VERSION }}, ${{ env.LINUX_VERSION }} ]
 #        os: [ macos-12 ]
 #        os: [ macos-12, ubuntu-22.04, windows-2022]
 
@@ -32,10 +35,10 @@ jobs:
       - name: Test
         run: go test -v -race ./...
 
-  build-artifacts-darwin:
+  build-binaries-darwin:
     if: startsWith(github.ref, 'refs/tags/v') # Only run this if it's a tag, e.g. v1.0.1
     needs: build-test
-    runs-on: macos-12
+    runs-on: ${{ env.MACOS_VERSION }}
 
     steps:
       - name: Checkout
@@ -65,10 +68,10 @@ jobs:
           path: ./dist-darwin
 
 
-  build-artifacts-linux:
+  build-binaries-linux:
     if: startsWith(github.ref, 'refs/tags/v')  # Only run this if it's a tag, e.g. v1.0.1
     needs: build-test
-    runs-on: ubuntu-22.04
+    runs-on: ${{ env.LINUX_VERSION }}
 
     steps:
       - name: Checkout
@@ -98,8 +101,8 @@ jobs:
           path: dist-linux
 
   publish:
-    needs: [ build-artifacts-darwin, build-artifacts-linux]
-    runs-on: ubuntu-22.04
+    needs: [ build-binaries-darwin, build-binaries-linux]
+    runs-on: ${{ env.LINUX_VERSION }}
 
     steps:
     - name: Checkout
