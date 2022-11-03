@@ -54,7 +54,7 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: release -f .goreleaser-darwin.yml
+          args: build -f .goreleaser-darwin.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
@@ -84,12 +84,12 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
-      - name: GoReleaser (build linux binaries)
+      - name: GoReleaser (build linux-amd64 binaries)
         uses: goreleaser/goreleaser-action@v3
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: release -f .goreleaser-linux-amd64.yml
+          args: build -f .goreleaser-linux-amd64.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
@@ -143,12 +143,12 @@ jobs:
           libncurses5-dev \
           libssl-dev
 
-      - name: GoReleaser (build linux binaries)
+      - name: GoReleaser (build linux-arm64 binaries)
         uses: goreleaser/goreleaser-action@v3
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: release -f .goreleaser-linux-arm64.yml
+          args: build -f .goreleaser-linux-arm64.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
