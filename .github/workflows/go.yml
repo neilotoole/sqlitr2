@@ -132,9 +132,7 @@ jobs:
           binutils-arm-linux-gnueabi \
           crossbuild-essential-arm64 \
           gcc-aarch64-linux-gnu \
-          gcc-arm-linux-gnueabi \
-          libc6-armel-cross \
-          libc6-dev-armel-cross
+          gcc-arm-linux-gnueabi
 
       - name: GoReleaser (build linux-arm64 binaries)
         uses: goreleaser/goreleaser-action@v3
