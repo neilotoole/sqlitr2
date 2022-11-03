@@ -27,7 +27,8 @@ builds:
     binary: sqlitr2
     env:
       - CGO_ENABLED=1
-      - CC=aarch64-linux-gnu-gc
+      - CC=aarch64-linux-gnu-gcc
+#      - CC=aarch64-linux-gnu-gc
       - CXX=aarch64-linux-gnu-g++
     goos:
       - linux
