@@ -27,7 +27,6 @@ archives:
   -
     replacements:
       darwin: macos
-      amd64: x86_64
     format_overrides:
       - goos: windows
         format: zip
@@ -82,18 +81,17 @@ scoop:
     name: neilotoole
     email: neilotoole@apache.org
 
-#
-#nfpms:
-#  -
-#    builds: ['build_linux']
-#    formats:
-#      - deb
-#      - rpm
-#    vendor: "neilotoole"
-#    homepage: "https://github.com/neilotoole/sqltir"
-#    maintainer: "neilotoole@apache.org"
-#    description: "sqlitr is a trivial Go/CGo SQLite CLI"
-#    license: "MIT"
+
+nfpms:
+  -
+    formats:
+      - deb
+      - rpm
+    vendor: "neilotoole"
+    homepage: "https://github.com/neilotoole/sqltir2"
+    maintainer: "neilotoole@apache.org"
+    description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
+    license: "MIT"
 #
 
 #
