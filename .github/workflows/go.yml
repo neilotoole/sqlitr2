@@ -86,13 +86,20 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y \
-          gcc-aarch64-linux-gnu \
-          crossbuild-essential-arm64 \
+          bc \
           binutils-aarch64-linux-gnu \
           binutils-arm-linux-gnueabi \
+          bison \
+          build-essential \
+          crossbuild-essential-arm64 \
           curl \
-          
-          gcc-arm-linux-gnueabi
+          flex \
+          gcc-aarch64-linux-gnu \
+          gcc-arm-linux-gnueabi \
+          libc6-armel-cross \
+          libc6-dev-armel-cross \
+          libncurses5-dev \
+          libssl-dev
 
       - name: GoReleaser (build linux binaries)
         uses: goreleaser/goreleaser-action@v3
