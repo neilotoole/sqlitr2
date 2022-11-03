@@ -9,9 +9,7 @@ jobs:
   go-test:
     strategy:
       matrix:
-        os: [ ubuntu-22.04 ]
-#        os: [ macos-12, ubuntu-22.04 ]
-#        os: [ macos-12 ]
+        os: [ macos-12, ubuntu-22.04 ]
 #        os: [ macos-12, ubuntu-22.04, windows-2022]
 
     runs-on: ${{ matrix.os }}
@@ -22,19 +20,18 @@ jobs:
         with:
           fetch-depth: 0
 
-#      - name: Set up Go
-#        uses: actions/setup-go@v3
-#        with:
-#          go-version: ${{ env.GO_VERSION }}
-#
-#      - name: Build
-#        run: go build -v ./...
-#
-#      - name: Test
-#        run: go test -v  ./...
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v  ./...
 
   goreleaser-gate:
-    #    if: startsWith(github.ref, 'refs/tags/v) # Only run this if it's a tag, e.g. v1.0.1
     needs: go-test
     runs-on: ubuntu-22.04
 
@@ -73,7 +70,6 @@ jobs:
           name: dist-darwin
           path: dist-darwin
 
-
   build-binaries-linux-amd64:
     needs: goreleaser-gate
     runs-on: ubuntu-22.04
@@ -98,12 +94,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-
-      - name: install tree
-        run: sudo apt update && sudo apt install tree
-
-      - name: show dist
-        run: tree dist-linux
 
       - name: Upload assets (linux-amd64)
         uses: actions/upload-artifact@v3
@@ -140,12 +130,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-
-      - name: install tree
-        run: sudo apt update && sudo apt install tree
-
-      - name: show dist
-        run: tree dist-linux
 
       - name: Upload assets (linux-arm64)
         uses: actions/upload-artifact@v3
@@ -186,50 +170,9 @@ jobs:
           name: dist-windows
           path: dist-windows
 
-
-  show-it:
-    needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: dist-darwin
-          path: dist-darwin
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: dist-linux-amd64
-          path: dist-linux
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: dist-linux-arm64
-          path: dist-linux
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: dist-windows
-          path: dist-windows
-
-      - name: install tree
-        run: sudo apt update && sudo apt install tree
-
-      - name: show dist*
-        run: tree dist*
-
-
-  publish-gate:
+  publish:
     if: startsWith(github.ref, 'refs/tags/v') # Only run this if it's a tag, e.g. v1.0.1
     needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Gate
-        run: echo "Publishing will proceed"
-
-  publish:
-    needs: [ publish-gate ]
     runs-on: ubuntu-22.04
 
     steps:
