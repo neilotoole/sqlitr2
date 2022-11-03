@@ -81,7 +81,6 @@ scoop:
     name: neilotoole
     email: neilotoole@apache.org
 
-
 nfpms:
   -
     formats:
@@ -92,46 +91,6 @@ nfpms:
     maintainer: "neilotoole@apache.org"
     description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
     license: "MIT"
-#
 
-#
-#snapcrafts:
-#  # For this to work, login to snapcraft.
-#  # - On macOS, "brew install snapcraft", then "snapcraft login".
-#  # - Or just use neilotoole/xcgo: https://github.com/neilotoole/xcgo/wiki/Snapcraft
-#  -
-#    builds:
-#      - build_linux
-#    name: sqlitr2
-#    summary: "Trivial SQLite query tool to demonstrate neilotoole/xcgo"
-#    description: |
-#      sqlitr is a trivial query tool for SQLite. It was created as a demonstration for neilotoole/xcgo, which is a Go cross-compiling docker builder image.
-#    grade: stable
-#    confinement: strict
-#    publish: true
-#    license: MIT
-#    base: core18
-#    apps:
-#      sqlitr2:
-#        # If your app requires extra permissions to work outside of its default
-#        # confined space, declare them here.
-#        # You can read the documentation about the available plugs and the
-#        # things they allow:
-#        # https://snapcraft.io/docs/reference/interfaces.
-#        #
-#        # Declare "home" and "network" plugs to grant access to
-#        # the user home dir, and the network
-#        plugs: ["home", "network"]
-#
-#dockers:
-#  -
-#    goos: linux
-#    goarch: amd64
-#    builds:
-#      - build_linux
-#    image_templates:
-#      - "neilotoole/sqlitr2:{{ .Version }}"
-#    extra_files:
-#      - README.md
-#      - LICENSE
-#      - testdata/example.sqlite
+furies:
+  - account: neilotoole
