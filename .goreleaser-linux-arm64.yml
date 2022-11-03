@@ -18,7 +18,8 @@ builds:
 #      - amd64
       - arm64
     ldflags:
-#      - -linkmode external -extldflags -static
+#      - -linkmode external -extldflags
+      - -static
       - -extld=aarch64-linux-gnu-gcc
       - -s -w -X main.version={{.Version}}
       - -X main.commit={{.Commit}}
