@@ -16,7 +16,7 @@ builds:
       - amd64
     ldflags:
 #      - -linkmode external -extldflags -static
-      - -extldflags
+#      - -extldflags
       - -linkmode external
       - -static
       - -s -w -X main.version={{.Version}}
