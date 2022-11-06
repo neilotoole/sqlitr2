@@ -22,7 +22,7 @@ builds:
 #      - -linkmode external -extldflags -static
 #      - -extldflags
 #      - -static
-      - -linkmode external
+#      - -linkmode external
       - -extld=aarch64-linux-gnu-gcc
       - -s -w -X main.version={{.Version}}
       - -X main.commit={{.Commit}}
