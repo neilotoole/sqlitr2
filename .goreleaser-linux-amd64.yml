@@ -10,6 +10,7 @@ builds:
     binary: sqlitr2
     env:
       - CGO_ENABLED=1
+      - CGO_LDFLAGS=-static
     goos:
       - linux
     goarch:
