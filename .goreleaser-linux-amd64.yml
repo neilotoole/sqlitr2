@@ -17,8 +17,8 @@ builds:
     ldflags:
 #      - -linkmode external -extldflags -static
 #      - -extldflags
+#      - -static
       - -linkmode external
-      - -static
       - -s -w -X main.version={{.Version}}
       - -X main.commit={{.Commit}}
       - -X main.date={{.Date}}
