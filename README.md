@@ -1,10 +1,7 @@
 # neilotoole/sqlitr2
-`sqlitr2` is a trivial query tool for SQLite written in Go. It was created as a
-example project for [neilotoole/xcgo](https://github.com/neilotoole/xcgo),
-which is a Go/Golang cross-compiling docker builder image. `sqlitr2` invokes
-the SQLite C library via CGo: building and distributing binaries for
-multiple platforms with CGo is a challenge. The `neilotoole/xcgo`
-image makes life easier for the common cases.
+`sqlitr2` is a trivial query tool for SQLite written in Go. It was
+created to test cross-platform Go/CGo builds using GitHub workflows/actions,
+GoReleaser, and [fury.io](https://fury.io) to host deb/rpm packages.
 
 ## Usage
 
@@ -115,31 +112,30 @@ $ snap install sqlitr2
 
 ### deb
 
-The `deb` package is not currently published to a repository, so we'll need to directly reference the packages as published in [releases](https://github.com/neilotoole/sqlitr2/releases).
-
-Download the `.deb` file (replace `v0.1.21` below with the appropriate version) and then install.
-
 ```shell script
-$ curl -fsSLO https://github.com/neilotoole/sqlitr2/releases/download/v0.1.21/sqlitr2_0.1.21_linux_amd64.deb
-$ sudo apt install -y ./sqlitr2_0.1.21_linux_amd64.deb
-$ rm ./sqlitr2_0.1.21_linux_amd64.deb
+# This script requires curl and gpg to be installed.
+sudo apt update -y && sudo apt install -y curl gpg
+
+curl -fsSL https://apt.fury.io/neilotoole/gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/fury-neilotoole.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/fury-neilotoole.gpg] https://apt.fury.io/neilotoole/ * *" | sudo tee /etc/apt/sources.list.d/fury-neilotoole.list > /dev/null
+
+sudo apt update -y && sudo apt install -y sqlitr2
 ```
 
 ### rpm
 
-As per `deb`, the `rpm` is not published to a repository, so directly reference the package as published in [releases](https://github.com/neilotoole/sqlitr2/releases).
+```shell
+cat <<EOF | sudo tee /etc/yum.repos.d/fury-neilotoole.repo
+[fury-neilotoole]
+name=fury-neilotoole
+baseurl=https://yum.fury.io/neilotoole/
+enabled=1
+gpgcheck=0
+gpgkey=https://apt.fury.io/neilotoole/gpg.key
+EOF
 
-
-Via `yum`:
-
-```shell script
-$ yum localinstall -y https://github.com/neilotoole/sqlitr2/releases/download/v0.1.21/sqlitr2_0.1.21_linux_amd64.rpm
-```
-
-Via `rpm`:
-
-```shell script
-$ sudo rpm -i https://github.com/neilotoole/sqlitr2/releases/download/v0.1.21/sqlitr2_0.1.21_linux_amd64.rpm
+sudo yum install -y sqlitr2
 ```
 
 ### tarball

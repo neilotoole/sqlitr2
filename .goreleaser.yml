@@ -93,4 +93,5 @@ nfpms:
     license: "MIT"
 
 furies:
+  # Upload deb and rpm to fury.io. Requires that envar $FURY_TOKEN be set.
   - account: neilotoole
