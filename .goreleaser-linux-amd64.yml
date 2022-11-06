@@ -16,10 +16,6 @@ builds:
     goarch:
       - amd64
     ldflags:
-#      - -linkmode external -extldflags -static
-#      - -extldflags
-#      - -static
-#      - -linkmode external
       - -s -w -X main.version={{.Version}}
       - -X main.commit={{.Commit}}
       - -X main.date={{.Date}}

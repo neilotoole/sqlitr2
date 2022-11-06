@@ -10,19 +10,14 @@ builds:
     binary: sqlitr2
     env:
       - CGO_ENABLED=1
+      - CGO_LDFLAGS=-static
       - CC=aarch64-linux-gnu-gcc
       - CXX=aarch64-linux-gnu-g++
-      - CGO_LDFLAGS=-static
-#      - CGO_CFLAGS=
     goos:
       - linux
     goarch:
       - arm64
     ldflags:
-#      - -linkmode external -extldflags -static
-#      - -extldflags
-#      - -static
-#      - -linkmode external
       - -extld=aarch64-linux-gnu-gcc
       - -s -w -X main.version={{.Version}}
       - -X main.commit={{.Commit}}
