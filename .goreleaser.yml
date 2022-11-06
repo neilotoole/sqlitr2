@@ -70,16 +70,16 @@ brews:
     test: |
       system "#{bin}/sqlitr2 --version"
 
-scoop:
-  bucket:
-    owner: neilotoole
-    name: sqlitr2
-  homepage: "https://github.com/neilotoole/sqlitr2"
-  description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
-  license: MIT
-  commit_author:
-    name: neilotoole
-    email: neilotoole@apache.org
+#scoop:
+#  bucket:
+#    owner: neilotoole
+#    name: sqlitr2
+#  homepage: "https://github.com/neilotoole/sqlitr2"
+#  description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
+#  license: MIT
+#  commit_author:
+#    name: neilotoole
+#    email: neilotoole@apache.org
 
 nfpms:
   -
