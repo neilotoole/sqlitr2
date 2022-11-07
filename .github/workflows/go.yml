@@ -36,7 +36,7 @@ jobs:
 
     steps:
       - name: Gate
-        run: echo "Invoke goreleaser"
+        run: echo "GoReleaser gate"
 
   build-binaries-darwin:
     needs: goreleaser-gate
