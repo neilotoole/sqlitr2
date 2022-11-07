@@ -58,12 +58,12 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build --skip-validate --rm-dist -f .goreleaser-darwin.yml
+          args: build --rm-dist -f .goreleaser-darwin.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
-      - name: Upload assets (darwin)
+      - name: Upload artifacts (darwin)
         uses: actions/upload-artifact@v3
         with:
           name: dist-darwin
@@ -89,12 +89,12 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build --skip-validate --rm-dist -f .goreleaser-linux-amd64.yml
+          args: build --rm-dist -f .goreleaser-linux-amd64.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
-      - name: Upload assets (linux-amd64)
+      - name: Upload artifacts (linux-amd64)
         uses: actions/upload-artifact@v3
         with:
           name: dist-linux-amd64
@@ -125,12 +125,12 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build --skip-validate --rm-dist -f .goreleaser-linux-arm64.yml
+          args: build --rm-dist -f .goreleaser-linux-arm64.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
-      - name: Upload assets (linux-arm64)
+      - name: Upload artifacts (linux-arm64)
         uses: actions/upload-artifact@v3
         with:
           name: dist-linux-arm64
@@ -157,13 +157,13 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build --skip-validate --rm-dist -f .goreleaser-windows.yml
+          args: build --rm-dist -f .goreleaser-windows.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
 
-      - name: Upload assets (windows)
+      - name: Upload artifacts (windows)
         uses: actions/upload-artifact@v3
         with:
           name: dist-windows
@@ -185,25 +185,25 @@ jobs:
       with:
         go-version: ${{ env.GO_VERSION }}
 
-    - name: Download darwin artifacts
+    - name: Download artifacts (darwin)
       uses: actions/download-artifact@v3
       with:
         name: dist-darwin
         path: dist-darwin
 
-    - name: Download linux-amd64 artifacts
+    - name: Download artifacts (linux-amd64)
       uses: actions/download-artifact@v3
       with:
         name: dist-linux-amd64
         path: dist-linux
 
-    - name: Download linux-arm64 artifacts
+    - name: Download artifacts (linux-arm64)
       uses: actions/download-artifact@v3
       with:
         name: dist-linux-arm64
         path: dist-linux
 
-    - name: Download windows artifacts
+    - name: Download artifacts (windows)
       uses: actions/download-artifact@v3
       with:
         name: dist-windows
