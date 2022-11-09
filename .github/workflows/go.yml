@@ -7,8 +7,8 @@ env:
 
   # GORELEASER_SKIP_VALIDATE is true by default, meaning that the
   # 'goreleaser build' command is executed with '--skip-validate=true'.
-  # This envar will be set to false for tagged builds (e.g. v1.0.1),
-  # because we want full validation to run on those builds.
+  # This envar will be set to false for tagged builds (e.g. 'v1.0.1'),
+  # because we want full validation to run on those builds for publishing.
   GORELEASER_SKIP_VALIDATE: 'true'
 
   # IS_PUBLISH is set to true if workflow is running for `v1.0.1` etc.
@@ -16,7 +16,6 @@ env:
 
 jobs:
   env-setup:
-    needs: go-test
     runs-on: ubuntu-22.04
 
     steps:
@@ -29,6 +28,7 @@ jobs:
           echo "Set GORELEASER_SKIP_VALIDATE=false because this is a tagged release build" >> $GITHUB_STEP_SUMMARY
 
   go-test:
+    needs: env-setup
     strategy:
       matrix:
         os: [ macos-12, ubuntu-22.04, windows-2022]
@@ -192,6 +192,7 @@ jobs:
           path: dist-windows
 
   publish:
+
     if: ${{ env.IS_PUBLISH == 'true' }}   # Only run this if it's a tag, e.g. v1.0.1
 #    if: startsWith(github.ref, 'refs/tags/v') # Only run this if it's a tag, e.g. v1.0.1
     needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
