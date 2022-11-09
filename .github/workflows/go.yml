@@ -12,7 +12,6 @@ env:
   GORELEASER_SKIP_VALIDATE: 'true'
 
 
-
 jobs:
 #  env-setup:
 #    runs-on: ubuntu-22.04
@@ -27,6 +26,7 @@ jobs:
       - name: wubble
         run: |
           echo ${{github.ref == true}}
+          echo "is tag" ${{startsWith(github.ref, 'refs/tags/v')}}
       - id: check
         name: set outputs
         run: |
