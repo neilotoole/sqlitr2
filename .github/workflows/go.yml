@@ -27,169 +27,194 @@ jobs:
           echo "GORELEASER_SKIP_VALIDATE=false" >> "$GITHUB_ENV"
           echo "Set GORELEASER_SKIP_VALIDATE=false because this is a tagged release build" >> $GITHUB_STEP_SUMMARY
 
-  go-test:
-    needs: env-setup
-    strategy:
-      matrix:
-        os: [ macos-12, ubuntu-22.04, windows-2022]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VERSION }}
-
-      - name: Build
-        run: go build -v ./...
-
-      - name: Test
-        run: go test -v  ./...
-
-
-  build-binaries-darwin:
-    needs: go-test
-    runs-on: macos-12
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VERSION }}
-
-      - name: GoReleaser (build darwin binaries)
-        uses: goreleaser/goreleaser-action@v3
-        with:
-          distribution: goreleaser-pro
-          version: ${{ env.GORELEASER_VERSION }}
-          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-darwin.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-
-      - name: Upload artifacts (darwin)
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-darwin
-          path: dist-darwin
-
-  build-binaries-linux-amd64:
-    needs: go-test
+  debug-context:
     runs-on: ubuntu-22.04
+    needs: env-setup
+#    if:
 
     steps:
-      - name: Dump GitHub context
-        id: github_context_step1
+      - name: Dump github context
         run: echo '${{ toJSON(github) }}'
       - name: Dump env context
-        id: github_context_step2
         run: echo '${{ toJSON(env) }}'
 
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VERSION }}
-
-      - name: GoReleaser (build linux-amd64 binaries)
-        uses: goreleaser/goreleaser-action@v3
-        with:
-          distribution: goreleaser-pro
-          version: ${{ env.GORELEASER_VERSION }}
-          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-amd64.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-
-      - name: Upload artifacts (linux-amd64)
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-linux-amd64
-          path: dist-linux
-
-  build-binaries-linux-arm64:
-    needs: go-test
+  test-conditions:
     runs-on: ubuntu-22.04
+    needs: debug-context
+#    if:
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VERSION }}
-
-      - name: Install toolchain dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y gcc-aarch64-linux-gnu
-
-      - name: GoReleaser (build linux-arm64 binaries)
-        uses: goreleaser/goreleaser-action@v3
-        with:
-          distribution: goreleaser-pro
-          version: ${{ env.GORELEASER_VERSION }}
-          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-arm64.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-
-      - name: Upload artifacts (linux-arm64)
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-linux-arm64
-          path: dist-linux
-
-
-  build-binaries-windows:
-    needs: go-test
-    runs-on: windows-2022
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VERSION }}
-
-      - name: GoReleaser (build windows binaries)
-        uses: goreleaser/goreleaser-action@v3
-        with:
-          distribution: goreleaser-pro
-          version: ${{ env.GORELEASER_VERSION }}
-          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-windows.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-
-
-      - name: Upload artifacts (windows)
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-windows
-          path: dist-windows
+      - name: is-it-working
+        run: echo "It's working"
+      - name: Dump github context
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump env context
+        run: echo '${{ toJSON(env) }}'
+#
+#  go-test:
+#    needs: env-setup
+#    strategy:
+#      matrix:
+#        os: [ macos-12, ubuntu-22.04, windows-2022]
+#
+#    runs-on: ${{ matrix.os }}
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Set up Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: ${{ env.GO_VERSION }}
+#
+#      - name: Build
+#        run: go build -v ./...
+#
+#      - name: Test
+#        run: go test -v  ./...
+#
+#
+#  build-binaries-darwin:
+#    needs: go-test
+#    runs-on: macos-12
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Set up Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: ${{ env.GO_VERSION }}
+#
+#      - name: GoReleaser (build darwin binaries)
+#        uses: goreleaser/goreleaser-action@v3
+#        with:
+#          distribution: goreleaser-pro
+#          version: ${{ env.GORELEASER_VERSION }}
+#          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-darwin.yml
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+#          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+#
+#      - name: Upload artifacts (darwin)
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: dist-darwin
+#          path: dist-darwin
+#
+#  build-binaries-linux-amd64:
+#    needs: go-test
+#    runs-on: ubuntu-22.04
+#
+#    steps:
+#      - name: Dump GitHub context
+#        id: github_context_step1
+#        run: echo '${{ toJSON(github) }}'
+#      - name: Dump env context
+#        id: github_context_step2
+#        run: echo '${{ toJSON(env) }}'
+#
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Set up Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: ${{ env.GO_VERSION }}
+#
+#      - name: GoReleaser (build linux-amd64 binaries)
+#        uses: goreleaser/goreleaser-action@v3
+#        with:
+#          distribution: goreleaser-pro
+#          version: ${{ env.GORELEASER_VERSION }}
+#          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-amd64.yml
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+#          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+#
+#      - name: Upload artifacts (linux-amd64)
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: dist-linux-amd64
+#          path: dist-linux
+#
+#  build-binaries-linux-arm64:
+#    needs: go-test
+#    runs-on: ubuntu-22.04
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Set up Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: ${{ env.GO_VERSION }}
+#
+#      - name: Install toolchain dependencies
+#        run: |
+#          sudo apt update
+#          sudo apt install -y gcc-aarch64-linux-gnu
+#
+#      - name: GoReleaser (build linux-arm64 binaries)
+#        uses: goreleaser/goreleaser-action@v3
+#        with:
+#          distribution: goreleaser-pro
+#          version: ${{ env.GORELEASER_VERSION }}
+#          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-arm64.yml
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+#          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+#
+#      - name: Upload artifacts (linux-arm64)
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: dist-linux-arm64
+#          path: dist-linux
+#
+#
+#  build-binaries-windows:
+#    needs: go-test
+#    runs-on: windows-2022
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Set up Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: ${{ env.GO_VERSION }}
+#
+#      - name: GoReleaser (build windows binaries)
+#        uses: goreleaser/goreleaser-action@v3
+#        with:
+#          distribution: goreleaser-pro
+#          version: ${{ env.GORELEASER_VERSION }}
+#          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-windows.yml
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+#          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+#
+#
+#      - name: Upload artifacts (windows)
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: dist-windows
+#          path: dist-windows
 #
 #  publish:
 #    needs: [ env-setup, go-test, build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
