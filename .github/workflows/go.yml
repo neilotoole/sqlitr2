@@ -4,9 +4,30 @@ on: push
 env:
   GO_VERSION: 1.19.2
   GORELEASER_VERSION: 1.12.3
-  GORELEASER_SKIP_VALIDATE: '--skip-validate'
+
+  # GORELEASER_SKIP_VALIDATE is true by default, meaning that the
+  # 'goreleaser build' command is executed with '--skip-validate=true'.
+  # This envar will be set to false for tagged builds (e.g. v1.0.1),
+  # because we want full validation to run on those builds.
+  GORELEASER_SKIP_VALIDATE: 'true'
+
+  # IS_PUBLISH is set to true if workflow is running for `v1.0.1` etc.
+  IS_PUBLISH: 'false'
 
 jobs:
+  env-setup:
+    needs: go-test
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Check if we want to actually publish the release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          echo "IS_PUBLISH=true" >> $GITHUB_ENV
+          echo "Set IS_PUBLISH=true because this is a tagged release build" >> $GITHUB_STEP_SUMMARY
+          echo "GORELEASER_SKIP_VALIDATE=false" >> $GITHUB_ENV
+          echo "Set GORELEASER_SKIP_VALIDATE=false because this is a tagged release build" >> $GITHUB_STEP_SUMMARY
+
   go-test:
     strategy:
       matrix:
@@ -31,19 +52,9 @@ jobs:
       - name: Test
         run: go test -v  ./...
 
-  goreleaser-gate:
-    needs: go-test
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Check if this is a release
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          echo "" > $GORELEASER_SKIP_VALIDATE
-          echo "Disabling goreleaser --skip-validate because this is a release build" >> $GITHUB_STEP_SUMMARY
 
   build-binaries-darwin:
-    needs: goreleaser-gate
+    needs: go-test
     runs-on: macos-12
 
     steps:
@@ -62,7 +73,7 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build ${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-darwin.yml
+          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-darwin.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
@@ -74,10 +85,17 @@ jobs:
           path: dist-darwin
 
   build-binaries-linux-amd64:
-    needs: goreleaser-gate
+    needs: go-test
     runs-on: ubuntu-22.04
 
     steps:
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump env context
+        id: github_context_step
+        run: echo '${{ toJSON(env) }}'
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -93,7 +111,7 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build ${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-amd64.yml
+          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-amd64.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
@@ -105,7 +123,7 @@ jobs:
           path: dist-linux
 
   build-binaries-linux-arm64:
-    needs: goreleaser-gate
+    needs: go-test
     runs-on: ubuntu-22.04
 
     steps:
@@ -129,7 +147,7 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build ${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-arm64.yml
+          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-arm64.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
@@ -142,7 +160,7 @@ jobs:
 
 
   build-binaries-windows:
-    needs: goreleaser-gate
+    needs: go-test
     runs-on: windows-2022
 
     steps:
@@ -161,7 +179,7 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build ${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-windows.yml
+          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-windows.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
@@ -174,7 +192,8 @@ jobs:
           path: dist-windows
 
   publish:
-    if: startsWith(github.ref, 'refs/tags/v') # Only run this if it's a tag, e.g. v1.0.1
+    if: ${{ env.IS_PUBLISH == true }} # Only run this if it's a tag, e.g. v1.0.1
+#    if: startsWith(github.ref, 'refs/tags/v') # Only run this if it's a tag, e.g. v1.0.1
     needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
     runs-on: ubuntu-22.04
 
