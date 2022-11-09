@@ -29,6 +29,7 @@ archives:
         format: zip
     files:
       - README.md
+      - CHANGELOG.md
       - LICENSE
 
 checksum:
@@ -77,6 +78,7 @@ scoop:
 nfpms:
   -
     formats:
+      - apk
       - deb
       - rpm
     vendor: "neilotoole"
