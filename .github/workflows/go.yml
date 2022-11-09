@@ -24,6 +24,8 @@ jobs:
       goreleaser_skip_validate: ${{ steps.check.outputs.goreleaser_skip_validate }}
 
     steps:
+      - name: Dump env context
+        run: echo '${{ toJSON(env) }}'
       - name: wubble
         run: |
           echo ${{github.ref == true}}
