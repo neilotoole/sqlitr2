@@ -89,7 +89,7 @@ jobs:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
           # It is important to provide the --skip-validate value. For tagged
-          # workflow executions (e.g. 'v1.0.1'), --skip-validate should be
+          # workflow executions (e.g. "v1.0.1"), --skip-validate should be
           # false. For non-tagged workflows (e.g. a push to an open PR),
           # goreleaser will fail if --skip-validate is not set to false.
           args: build --skip-validate=${{ env.NO_PUBLISH }} --rm-dist -f .goreleaser-darwin.yml
@@ -209,7 +209,7 @@ jobs:
     needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
     runs-on: ubuntu-22.04
 
-    # Note: we can't use env.NO_PUBLISH in the job 'if' conditional, presumably
+    # Note: we can't use env.NO_PUBLISH in the job "if" conditional, presumably
     # because the job runner machine isn't created until after the conditional
     # is evaluated, and thus there is no env context to access.
     if: ${{startsWith(github.ref, 'refs/tags/v')}}

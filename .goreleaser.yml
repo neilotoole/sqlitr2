@@ -1,3 +1,5 @@
+project_name: sqlitr2
+
 before:
   hooks:
     - go mod tidy
@@ -17,8 +19,8 @@ builds:
       - goos: windows
         goarch: arm64
     prebuilt:
-      path: dist-{{ .Os }}/sqlitr2_{{ .Os }}_{{ .Arch }}{{ with .Amd64 }}_{{ . }}{{ end }}/sqlitr2{{ .Ext }}
-    binary: sqlitr2
+      path: dist-{{ .Os }}/{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ with .Amd64 }}_{{ . }}{{ end }}/{{ .ProjectName }}{{ .Ext }}
+    binary: {{ .ProjectName }}
 
 archives:
   -
@@ -42,34 +44,34 @@ changelog:
 release:
   github:
     owner: neilotoole
-    name: sqlitr2
+    name: {{ .ProjectName }}
   draft: false
   prerelease: auto
 
 brews:
   -
-    homepage: "https://github.com/neilotoole/sqlitr2"
-    description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
+    homepage: "https://github.com/neilotoole/{{ .ProjectName }}"
+    description: "{{ .ProjectName }} is a trivial Go/CGo SQLite CLI"
     license: MIT
     tap:
       owner: neilotoole
-      name: homebrew-sqlitr2
+      name: homebrew-{{ .ProjectName }}
 
     commit_author:
       name: neilotoole
       email: neilotoole@apache.org
 
     install: |
-      bin.install "sqlitr2"
+      bin.install "{{ .ProjectName }}"
     test: |
-      system "#{bin}/sqlitr2 --version"
+      system "#{bin}/{{ .ProjectName }} --version"
 
 scoop:
   bucket:
     owner: neilotoole
-    name: sqlitr2
-  homepage: "https://github.com/neilotoole/sqlitr2"
-  description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
+    name: {{ .ProjectName }}
+  homepage: "https://github.com/neilotoole/{{ .ProjectName }}"
+  description: "{{ .ProjectName }} is a trivial Go/CGo SQLite CLI"
   license: MIT
   commit_author:
     name: neilotoole
@@ -82,9 +84,9 @@ nfpms:
       - deb
       - rpm
     vendor: "neilotoole"
-    homepage: "https://github.com/neilotoole/sqltir2"
+    homepage: "https://github.com/neilotoole/{{ .ProjectName }}"
     maintainer: "neilotoole@apache.org"
-    description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
+    description: "{{ .ProjectName }} is a trivial Go/CGo SQLite CLI"
     license: "MIT"
 
 furies:

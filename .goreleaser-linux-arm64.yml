@@ -1,3 +1,5 @@
+project_name: sqlitr2
+
 before:
   hooks:
     - go mod tidy
@@ -7,7 +9,7 @@ dist: dist-linux
 builds:
   -
     main: .
-    binary: sqlitr2
+    binary: {{ .ProjectName }}
     env:
       - CGO_ENABLED=1
       - CGO_LDFLAGS=-static
