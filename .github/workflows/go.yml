@@ -17,7 +17,7 @@ jobs:
         if: env.PUBLISH == false
         run: echo she is false
       - name: if-envar-true
-        if: env.PUBLISH
+        if: env.PUBLISH == true
         run: echo she is true
 
   wubble-true:
@@ -25,8 +25,8 @@ jobs:
 
     steps:
       - name: if-envar-true
-        if: env.PUBLISH
-        run: echo she is set
+        if: env.PUBLISH == true
+        run: echo she is true
       - name: if-envar-false
         if: env.PUBLISH == false
         run: echo she is false
