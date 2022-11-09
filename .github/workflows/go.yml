@@ -1,11 +1,45 @@
-name: Main pipeline
+# This workflow exemplifies how to build and release a CGo-encumbered Go
+# project with GoReleaser.
+#
+# Background: https://goreleaser.com/customization/build/#import-pre-built-binaries
+#
+# Note that this workflow requires GoReleaser Pro (a paid subscription),
+# because the workflow relies upon the GoReleaser Pro "pre-built binaries"
+# feature, which is not available in the standard GoReleaser distribution.
+#
+# This workflow will run on any push. That is to say, it runs if you push
+# to a branch, or tag a release.
+#
+# The basic sequence is:
+#
+# - "go-test" job is executed, on an OS matrix (macos/darwin, linux, windows).
+# - If that succeeds, "build-binaries-X" jobs run for darwin, linux, and windows.
+#   - Note that there are separate Linux jobs for "amd64" and "arm64", because
+#     they require distinct config. Perhaps it"s possible to collapse those distinct
+#     Linux configs into one build?
+#   - Thus there are five distinct GoRelease config files required:
+#     - .goreleaser-darwin.yml
+#     - .goreleaser-windows.yml
+#     - .goreleaser-linux-amd64.yml
+#     - .goreleaser-linux-arm64.yml
+#     - .goreleaser.yml: this is the master config that performs publishing.
+
+# - If the "build-binaries-X" jobs all succeed, then the "publish" job runs.
+#   It executes the ".goreleaser.yml"
+#
+# The "publish" job runs only if the release is tagged with a value prefixed
+# with "v", e.g. "v1.0.1". Note also that the build jobs ("build-binaries-darwin",
+# "build-binaries-windows" etc.) will set the GoReleaser "--skip-validate" flag
+# to true or false, depending upon whether this is a tagged release. This state
+# is stored in "env.NO_PUBLISH".
+name: GoReleaser CGo workflow
 on: push
 
 env:
   GO_VERSION: 1.19.2
   GORELEASER_VERSION: 1.12.3
 
-  # NO_PUBLISH is true if the tag doesn't start with 'v', e.g. 'v1.0.1'.
+  # NO_PUBLISH is true if the tag doesn't start with "v", e.g. 'v1.0.1'.
   NO_PUBLISH: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
 jobs:
@@ -54,6 +88,10 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
+          # It is important to provide the --skip-validate value. For tagged
+          # workflow executions (e.g. 'v1.0.1'), --skip-validate should be
+          # false. For non-tagged workflows (e.g. a push to an open PR),
+          # goreleaser will fail if --skip-validate is not set to false.
           args: build --skip-validate=${{ env.NO_PUBLISH }} --rm-dist -f .goreleaser-darwin.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
