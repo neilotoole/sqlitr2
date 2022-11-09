@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: if-envar-false
-        if: !env.PUBLISH
+        if: env.PUBLISH == false
         run: echo she is false
       - name: if-envar-true
         if: env.PUBLISH
@@ -28,7 +28,7 @@ jobs:
         if: env.PUBLISH
         run: echo she is set
       - name: if-envar-false
-        if: !env.PUBLISH
+        if: env.PUBLISH == false
         run: echo she is false
 
 
