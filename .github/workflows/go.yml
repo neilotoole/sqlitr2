@@ -9,16 +9,29 @@ env:
   PUBLISH: ${{startsWith(github.ref, 'refs/tags/v')}}
 
 jobs:
-  wubble:
+  wubble-false:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: if-envar-false
+        if: env.PUBLISH == 'false'
+        run: echo she is false
+      - name: if-envar-true
+        if: env.PUBLISH == 'true'
+        run: echo she is true
+
+  wubble-true:
     runs-on: ubuntu-22.04
 
     steps:
       - name: if-envar-true
-        if: env.PUBLISH == true
+        if: env.PUBLISH == 'true'
         run: echo she is set
-      - name: if-envar-true
-        if: env.PUBLISH == false
+      - name: if-envar-false
+        if: env.PUBLISH == 'false'
         run: echo she is false
+
+
 #
 #  go-test:
 #    strategy:
