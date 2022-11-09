@@ -25,10 +25,10 @@ jobs:
 
     steps:
       - name: if-envar-true
-        if: env.PUBLISH == true
+        if: env.PUBLISH == 'true'
         run: echo she is true
       - name: if-envar-false
-        if: env.PUBLISH == false
+        if: env.PUBLISH == 'false'
         run: echo she is false
 
 
