@@ -170,7 +170,7 @@ jobs:
   publish:
     needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
     runs-on: ubuntu-22.04
-    if: ${{ env.PUBLISH  == true}}
+    if: contains(env.PUBLISH, 'true')
 
     steps:
     - name: Checkout
