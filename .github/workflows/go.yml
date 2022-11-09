@@ -11,259 +11,249 @@ env:
   # because we want full validation to run on those builds for publishing.
   GORELEASER_SKIP_VALIDATE: 'true'
 
-  # IS_PUBLISH is set to true if workflow is running for `v1.0.1` etc.
-  IS_PUBLISH: 'false'
+
 
 jobs:
-  env-setup:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Check if we want to actually publish the release
-#        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          echo "IS_PUBLISH=true" >> "$GITHUB_ENV"
-          echo "Set IS_PUBLISH=true because this is a tagged release build" >> $GITHUB_STEP_SUMMARY
-          echo "GORELEASER_SKIP_VALIDATE=false" >> "$GITHUB_ENV"
-          echo "Set GORELEASER_SKIP_VALIDATE=false because this is a tagged release build" >> $GITHUB_STEP_SUMMARY
-
-  debug-context:
-    runs-on: ubuntu-22.04
-    needs: env-setup
-#    if:
-
-    steps:
-      - name: Dump github context
-        run: echo '${{ toJSON(github) }}'
-      - name: Dump env context
-        run: echo '${{ toJSON(env) }}'
-
-
-  test-conditions:
-    runs-on: ubuntu-22.04
-    needs: debug-context
-#    if:
-
-    steps:
-      - name: is-it-working
-        run: echo "It's working"
-      - name: Dump github context
-        run: echo '${{ toJSON(github) }}'
-      - name: Dump env context
-        run: echo '${{ toJSON(env) }}'
-#
-#  go-test:
-#    needs: env-setup
-#    strategy:
-#      matrix:
-#        os: [ macos-12, ubuntu-22.04, windows-2022]
-#
-#    runs-on: ${{ matrix.os }}
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#
-#      - name: Set up Go
-#        uses: actions/setup-go@v3
-#        with:
-#          go-version: ${{ env.GO_VERSION }}
-#
-#      - name: Build
-#        run: go build -v ./...
-#
-#      - name: Test
-#        run: go test -v  ./...
-#
-#
-#  build-binaries-darwin:
-#    needs: go-test
-#    runs-on: macos-12
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#
-#      - name: Set up Go
-#        uses: actions/setup-go@v3
-#        with:
-#          go-version: ${{ env.GO_VERSION }}
-#
-#      - name: GoReleaser (build darwin binaries)
-#        uses: goreleaser/goreleaser-action@v3
-#        with:
-#          distribution: goreleaser-pro
-#          version: ${{ env.GORELEASER_VERSION }}
-#          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-darwin.yml
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-#          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-#
-#      - name: Upload artifacts (darwin)
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: dist-darwin
-#          path: dist-darwin
-#
-#  build-binaries-linux-amd64:
-#    needs: go-test
+#  env-setup:
 #    runs-on: ubuntu-22.04
+
+
+
+
+#  debug-context:
+#    runs-on: ubuntu-22.04
+#    needs: env-setup
+##    if:
 #
 #    steps:
-#      - name: Dump GitHub context
-#        id: github_context_step1
+#      - name: Dump github context
 #        run: echo '${{ toJSON(github) }}'
 #      - name: Dump env context
-#        id: github_context_step2
 #        run: echo '${{ toJSON(env) }}'
-#
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#
-#      - name: Set up Go
-#        uses: actions/setup-go@v3
-#        with:
-#          go-version: ${{ env.GO_VERSION }}
-#
-#      - name: GoReleaser (build linux-amd64 binaries)
-#        uses: goreleaser/goreleaser-action@v3
-#        with:
-#          distribution: goreleaser-pro
-#          version: ${{ env.GORELEASER_VERSION }}
-#          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-amd64.yml
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-#          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-#
-#      - name: Upload artifacts (linux-amd64)
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: dist-linux-amd64
-#          path: dist-linux
-#
-#  build-binaries-linux-arm64:
-#    needs: go-test
-#    runs-on: ubuntu-22.04
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#
-#      - name: Set up Go
-#        uses: actions/setup-go@v3
-#        with:
-#          go-version: ${{ env.GO_VERSION }}
-#
-#      - name: Install toolchain dependencies
-#        run: |
-#          sudo apt update
-#          sudo apt install -y gcc-aarch64-linux-gnu
-#
-#      - name: GoReleaser (build linux-arm64 binaries)
-#        uses: goreleaser/goreleaser-action@v3
-#        with:
-#          distribution: goreleaser-pro
-#          version: ${{ env.GORELEASER_VERSION }}
-#          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-arm64.yml
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-#          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-#
-#      - name: Upload artifacts (linux-arm64)
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: dist-linux-arm64
-#          path: dist-linux
-#
-#
-#  build-binaries-windows:
-#    needs: go-test
-#    runs-on: windows-2022
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#
-#      - name: Set up Go
-#        uses: actions/setup-go@v3
-#        with:
-#          go-version: ${{ env.GO_VERSION }}
-#
-#      - name: GoReleaser (build windows binaries)
-#        uses: goreleaser/goreleaser-action@v3
-#        with:
-#          distribution: goreleaser-pro
-#          version: ${{ env.GORELEASER_VERSION }}
-#          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-windows.yml
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-#          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-#
-#
-#      - name: Upload artifacts (windows)
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: dist-windows
-#          path: dist-windows
-#
-#  publish:
-#    needs: [ env-setup, go-test, build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
-#    runs-on: ubuntu-22.04
-##    if: env.IS_PUBLISH == 'true'   # Only run this if it's a tag, e.g. v1.0.1
-##    if: startsWith(github.ref, 'refs/tags/v') # Only run this if it's a tag, e.g. v1.0.1
-#
-#    steps:
-#    - name: Checkout
-#      uses: actions/checkout@v3
-#      with:
-#        fetch-depth: 0
-#
-#    - name: Set up Go
-#      uses: actions/setup-go@v3
-#      with:
-#        go-version: ${{ env.GO_VERSION }}
-#
-#    - name: Download artifacts (darwin)
-#      uses: actions/download-artifact@v3
-#      with:
-#        name: dist-darwin
-#        path: dist-darwin
-#
-#    - name: Download artifacts (linux-amd64)
-#      uses: actions/download-artifact@v3
-#      with:
-#        name: dist-linux-amd64
-#        path: dist-linux
-#
-#    - name: Download artifacts (linux-arm64)
-#      uses: actions/download-artifact@v3
-#      with:
-#        name: dist-linux-arm64
-#        path: dist-linux
-#
-#    - name: Download artifacts (windows)
-#      uses: actions/download-artifact@v3
-#      with:
-#        name: dist-windows
-#        path: dist-windows
-#
-#    - name: GoReleaser (publish)
-#      uses: goreleaser/goreleaser-action@v3
-#      with:
-#        distribution: goreleaser-pro
-#        version: ${{ env.GORELEASER_VERSION }}
-#        args: release -f .goreleaser.yml
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-#        GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-#        FURY_TOKEN: ${{ secrets.FURY_TOKEN }}
+
+
+  go-test:
+    strategy:
+      matrix:
+        os: [ macos-12, ubuntu-22.04, windows-2022]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v  ./...
+
+
+  build-binaries-darwin:
+    needs: go-test
+    runs-on: macos-12
+
+    steps:
+      - name: Check if it's a tagged release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "GORELEASER_SKIP_VALIDATE=false" >> "$GITHUB_ENV"
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: GoReleaser (build darwin binaries)
+        uses: goreleaser/goreleaser-action@v3
+        with:
+          distribution: goreleaser-pro
+          version: ${{ env.GORELEASER_VERSION }}
+          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-darwin.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+
+      - name: Upload artifacts (darwin)
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-darwin
+          path: dist-darwin
+
+  build-binaries-linux-amd64:
+    needs: go-test
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Check if it's a tagged release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "GORELEASER_SKIP_VALIDATE=false" >> "$GITHUB_ENV"
+      - name: Dump GitHub context
+        id: github_context_step1
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump env context
+        id: github_context_step2
+        run: echo '${{ toJSON(env) }}'
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: GoReleaser (build linux-amd64 binaries)
+        uses: goreleaser/goreleaser-action@v3
+        with:
+          distribution: goreleaser-pro
+          version: ${{ env.GORELEASER_VERSION }}
+          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-amd64.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+
+      - name: Upload artifacts (linux-amd64)
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-linux-amd64
+          path: dist-linux
+
+  build-binaries-linux-arm64:
+    needs: go-test
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Check if it's a tagged release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "GORELEASER_SKIP_VALIDATE=false" >> "$GITHUB_ENV"
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Install toolchain dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y gcc-aarch64-linux-gnu
+
+      - name: GoReleaser (build linux-arm64 binaries)
+        uses: goreleaser/goreleaser-action@v3
+        with:
+          distribution: goreleaser-pro
+          version: ${{ env.GORELEASER_VERSION }}
+          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-arm64.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+
+      - name: Upload artifacts (linux-arm64)
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-linux-arm64
+          path: dist-linux
+
+
+  build-binaries-windows:
+    needs: go-test
+    runs-on: windows-2022
+
+    steps:
+      - name: Check if it's a tagged release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "GORELEASER_SKIP_VALIDATE=false" >> "$GITHUB_ENV"
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: GoReleaser (build windows binaries)
+        uses: goreleaser/goreleaser-action@v3
+        with:
+          distribution: goreleaser-pro
+          version: ${{ env.GORELEASER_VERSION }}
+          args: build --skip-validate=${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-windows.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+
+
+      - name: Upload artifacts (windows)
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-windows
+          path: dist-windows
+
+  publish:
+    needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
+    runs-on: ubuntu-22.04
+    if: startsWith(github.ref, 'refs/tags/v') # Only run this if it's a tag, e.g. v1.0.1
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: ${{ env.GO_VERSION }}
+
+    - name: Download artifacts (darwin)
+      uses: actions/download-artifact@v3
+      with:
+        name: dist-darwin
+        path: dist-darwin
+
+    - name: Download artifacts (linux-amd64)
+      uses: actions/download-artifact@v3
+      with:
+        name: dist-linux-amd64
+        path: dist-linux
+
+    - name: Download artifacts (linux-arm64)
+      uses: actions/download-artifact@v3
+      with:
+        name: dist-linux-arm64
+        path: dist-linux
+
+    - name: Download artifacts (windows)
+      uses: actions/download-artifact@v3
+      with:
+        name: dist-windows
+        path: dist-windows
+
+    - name: GoReleaser (publish)
+      uses: goreleaser/goreleaser-action@v3
+      with:
+        distribution: goreleaser-pro
+        version: ${{ env.GORELEASER_VERSION }}
+        args: release -f .goreleaser.yml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+        FURY_TOKEN: ${{ secrets.FURY_TOKEN }}
