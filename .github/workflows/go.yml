@@ -26,8 +26,9 @@ jobs:
     steps:
       - name: wubble
         run: |
-          echo ${{github.ref}}
+          echo ${{github.ref == true}}
       - id: check
+        name: set outputs
         run: |
           if [[ "${{ github.ref }}" == "refs/tags/v"* ]]; then
             echo "Publish this thing!"
