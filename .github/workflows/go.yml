@@ -4,6 +4,7 @@ on: push
 env:
   GO_VERSION: 1.19.2
   GORELEASER_VERSION: 1.12.3
+  GORELEASER_SKIP_VALIDATE: '--skip-validate'
 
 jobs:
   go-test:
@@ -35,8 +36,11 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Gate
-        run: echo "GoReleaser gate"
+      - name: Check if this is a release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          echo "" > $GORELEASER_SKIP_VALIDATE
+          echo "Disabling goreleaser --skip-validate because this is a release build" >> $GITHUB_STEP_SUMMARY
 
   build-binaries-darwin:
     needs: goreleaser-gate
@@ -58,7 +62,7 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build --rm-dist -f .goreleaser-darwin.yml
+          args: build ${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-darwin.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
@@ -89,7 +93,7 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build --rm-dist -f .goreleaser-linux-amd64.yml
+          args: build ${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-amd64.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
@@ -125,7 +129,7 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build --rm-dist -f .goreleaser-linux-arm64.yml
+          args: build ${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-linux-arm64.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
@@ -157,7 +161,7 @@ jobs:
         with:
           distribution: goreleaser-pro
           version: ${{ env.GORELEASER_VERSION }}
-          args: build --rm-dist -f .goreleaser-windows.yml
+          args: build ${{ env.GORELEASER_SKIP_VALIDATE }} --rm-dist -f .goreleaser-windows.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}

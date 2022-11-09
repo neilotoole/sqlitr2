@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added CHANGELOG.md
 
+### Removed
+
+- `goreleaser-release.sh` and `goreleaser-snapshot.sh`: no longer required because
+goreleaser is now executed via GitHub workflow.
+
 ## [v0.0.24] - 2022-11-06
 
 ### Changed
