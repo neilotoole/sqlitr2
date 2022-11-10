@@ -33,18 +33,21 @@
 # to true or false, depending upon whether this is a tagged release. This state
 # is stored in "env.NO_PUBLISH".
 name: GoReleaser CGo workflow
-on: push
+on:
+  push:
+    paths-ignore:
+      - 'sqlitr2.json' # This is updated by scoop; no need to run a new build
 
 env:
   GO_VERSION: 1.19.2
   GORELEASER_VERSION: 1.12.3
 
-  # NO_PUBLISH is true if the tag doesn't start with "v", e.g. 'v1.0.1'.
+  # NO_PUBLISH is true if the tag doesn't start with "v", e.g. "v1.0.1".
   NO_PUBLISH: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
 jobs:
 
-  print-env:
+  debug-dump:
     runs-on: ubuntu-22.04
 
     steps:
