@@ -118,10 +118,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Dump env context
-        id: github_context_step2
-        run: echo '${{ toJSON(env) }}'
-
       - name: Checkout
         uses: actions/checkout@v3
         with:

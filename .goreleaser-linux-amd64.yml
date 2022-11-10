@@ -9,7 +9,7 @@ dist: dist-linux
 builds:
   -
     main: .
-    binary: {{ .ProjectName }}
+    binary: "{{ .ProjectName }}"
     env:
       - CGO_ENABLED=1
       - CGO_LDFLAGS=-static
