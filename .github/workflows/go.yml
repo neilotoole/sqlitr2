@@ -1,4 +1,4 @@
-# This workflow exemplifies how to build and release a CGo-encumbered Go
+# This workflow shows how to build and release a CGo-encumbered Go
 # project with GoReleaser.
 #
 # Background:
@@ -10,9 +10,9 @@
 # feature, which is not available in the standard GoReleaser distribution.
 #
 # This workflow will run on any push. That is to say, it runs if you push
-# to a branch, or tag a release.
+# to a branch, or tag a release, etc.
 #
-# The basic sequence is:
+# The workflow sequence is:
 #
 # - "go-test" job is executed, on an OS matrix (macos/darwin, linux, windows).
 # - If that succeeds, "build-binaries-X" jobs run for darwin, linux, and windows.
@@ -25,16 +25,17 @@
 #     - .goreleaser-linux-amd64.yml
 #     - .goreleaser-linux-arm64.yml
 #     - .goreleaser.yml: this is the master config that performs publishing.
-#
 # - If the "build-binaries-X" jobs all succeed, then the "publish" job runs.
 #   It executes the ".goreleaser.yml" config.
 #
 # The "publish" job runs only if the release is tagged with a value prefixed
 # with "v", e.g. "v1.0.1". Note also that the build jobs ("build-binaries-darwin",
 # "build-binaries-windows" etc.) set the GoReleaser "--skip-validate" flag
-# to true or false, depending upon whether this is a tagged release. This state
-# is stored in "env.NO_PUBLISH".
+# to "true" or "false", depending upon whether this is a tagged release. This
+# state is stored in "env.NO_PUBLISH".
+
 name: GoReleaser CGo workflow
+
 on:
   push:
     paths-ignore:
@@ -95,8 +96,8 @@ jobs:
           version: ${{ env.GORELEASER_VERSION }}
           # It is important to provide the --skip-validate value. For tagged
           # workflow executions (e.g. "v1.0.1"), --skip-validate should be
-          # false. For non-tagged workflows (e.g. a push to an open PR),
-          # goreleaser will fail if --skip-validate is not set to false.
+          # false. For non-tagged workflows (e.g. a push to a branch or an
+          # open PR), goreleaser will fail if --skip-validate is not set to false.
           args: build --skip-validate=${{ env.NO_PUBLISH }} --rm-dist -f .goreleaser-darwin.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
