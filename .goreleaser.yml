@@ -20,7 +20,7 @@ builds:
         goarch: arm64
     prebuilt:
       path: dist-{{ .Os }}/{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ with .Amd64 }}_{{ . }}{{ end }}/{{ .ProjectName }}{{ .Ext }}
-    binary: {{ .ProjectName }}
+    binary: "{{ .ProjectName }}"
 
 archives:
   -
@@ -44,7 +44,7 @@ changelog:
 release:
   github:
     owner: neilotoole
-    name: {{ .ProjectName }}
+    name: "{{ .ProjectName }}"
   draft: false
   prerelease: auto
 
@@ -69,7 +69,7 @@ brews:
 scoop:
   bucket:
     owner: neilotoole
-    name: {{ .ProjectName }}
+    name: "{{ .ProjectName }}"
   homepage: "https://github.com/neilotoole/{{ .ProjectName }}"
   description: "{{ .ProjectName }} is a trivial Go/CGo SQLite CLI"
   license: MIT
