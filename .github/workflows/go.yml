@@ -48,16 +48,6 @@ env:
   NO_PUBLISH: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
 jobs:
-
-  debug-dump:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Dump github context
-        run: echo '${{ toJSON(github) }}'
-      - name: Dump env context
-        run: echo '${{ toJSON(env) }}'
-
   go-test:
     strategy:
       matrix:
@@ -220,9 +210,9 @@ jobs:
     needs: [ build-binaries-darwin, build-binaries-linux-amd64, build-binaries-linux-arm64, build-binaries-windows ]
     runs-on: ubuntu-22.04
 
-    # Note: we can't use env.NO_PUBLISH in the job "if" conditional, presumably
+    # Note: we can't use "env.NO_PUBLISH" in the job "if" conditional, presumably
     # because the job runner machine isn't created until after the conditional
-    # is evaluated, and thus there is no env context to access.
+    # is evaluated, and thus there is no "env" context to access.
     if: ${{startsWith(github.ref, 'refs/tags/v')}}
 
     steps:
