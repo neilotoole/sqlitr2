@@ -43,6 +43,16 @@ env:
   NO_PUBLISH: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
 jobs:
+
+  print-env:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Dump github context
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump env context
+        run: echo '${{ toJSON(env) }}'
+
   go-test:
     strategy:
       matrix:
