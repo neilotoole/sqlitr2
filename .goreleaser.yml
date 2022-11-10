@@ -44,34 +44,34 @@ changelog:
 release:
   github:
     owner: neilotoole
-    name: "{{ .ProjectName }}"
+    name: sqlitr2
   draft: false
   prerelease: auto
 
 brews:
   -
-    homepage: "https://github.com/neilotoole/{{ .ProjectName }}"
-    description: "{{ .ProjectName }} is a trivial Go/CGo SQLite CLI"
+    homepage: "https://github.com/neilotoole/sqlitr2"
+    description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
     license: MIT
     tap:
       owner: neilotoole
-      name: homebrew-{{ .ProjectName }}
+      name: homebrew-sqlitr2
 
     commit_author:
       name: neilotoole
       email: neilotoole@apache.org
 
     install: |
-      bin.install "{{ .ProjectName }}"
+      bin.install sqlitr2
     test: |
-      system "#{bin}/{{ .ProjectName }} --version"
+      system "#{bin}/sqlitr2 --version"
 
 scoop:
   bucket:
     owner: neilotoole
-    name: "{{ .ProjectName }}"
-  homepage: "https://github.com/neilotoole/{{ .ProjectName }}"
-  description: "{{ .ProjectName }} is a trivial Go/CGo SQLite CLI"
+    name: sqlitr2
+  homepage: "https://github.com/neilotoole/sqlitr2"
+  description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
   license: MIT
   commit_author:
     name: neilotoole
@@ -84,9 +84,9 @@ nfpms:
       - deb
       - rpm
     vendor: "neilotoole"
-    homepage: "https://github.com/neilotoole/{{ .ProjectName }}"
+    homepage: "https://github.com/neilotoole/sqlitr2"
     maintainer: "neilotoole@apache.org"
-    description: "{{ .ProjectName }} is a trivial Go/CGo SQLite CLI"
+    description: "sqlitr2 is a trivial Go/CGo SQLite CLI"
     license: "MIT"
 
 furies:
