@@ -8,7 +8,7 @@ dist: dist-darwin
 
 builds:
   - main: .
-#    binary: {{ .ProjectName }}
+    binary: "{{ .ProjectName }}"
     env:
       - CGO_ENABLED=1
     goos:
